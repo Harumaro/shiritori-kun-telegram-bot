@@ -9,10 +9,10 @@ var tg = require('telegram-node-bot')('insert-telegram-bot-token-here');
 ```
 
 **Usage**:
+- /play the bot will show a button to start playing
+- /quit the bot will show a button to stop playing
 - /word **word-in-kanji[i.e.: 漢字]** **word-in-kana[i.e.: かんじ]**: sends a word to the game, accepts both half-width and full-width space between characters.
-- (alt. version) **word-in-kana[i.e.: サマー]** *translation[i.e.: summer]*
-- .remove **word-in-kanji**: removes a word from the database
-- .reset: cleans the whole database of words
+- (alt. version) /word **word-in-kana[i.e.: サマー]**
 
 **Customization**:
 
