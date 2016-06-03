@@ -6,7 +6,6 @@ var game = require('./lib/game')({
     smallKanaFallbackToPreviousKanaIsValid: true
   }
 });
-var GameStates = game.e;
 
 tg.router
   .when(['/ping', '/quit', '/play'], 'MainController')
@@ -67,33 +66,38 @@ tg.controller('GameController', ($) => {
   });
 });
 
-GameStates.on('game_over', function (chId) {
+game.on('game_over', function (chId) {
   var channel = game.getChannel(chId);
   tg.sendMessage(channel.getId(), "Cannot play alone, game's over! Start a new one perhaps?");
 });
 
-GameStates.on('user_state_changed', function (chId, uId, state) {
-  console.log('INDEX Triggered state: ' + state + ' for user: ' + uId);
-  var channel = game.getChannel(chId);
+game.on(game.states.join, function (channel) {
+  tg.sendMessage(channel.getId(), 'A new challenger joined the game!');
+});
 
-  if (state == game.states.join) {
-    tg.sendMessage(channel.getId(), 'A new challenger joined the game!');
-  }
-  if (state == game.states.ownTurn) {
-    tg.sendMessage(channel.getId(), "It's " + channel.getPlayer(uId).getName() + "'s turn.");
-  }
-  if (state == game.states.lost) {
-    tg.sendMessage(channel.getId(), channel.getPlayer(uId).getName() + ' lost!');
-  }
-  if (state == game.states.turnSkipped) {
-    tg.sendMessage(channel.getId(), 'Turn skipped!');
-  }
-  if (state == game.states.wrongWord) {
-    tg.sendMessage(channel.getId(), 'Word not allowed or not found on dictionaries.');
-  }
-  if (state == game.states.turnOver) {
-  }
-  if (!state) {
-    console.log('Unknown State');
-  }
+game.on(game.states.ownTurn, function (channel) {
+  var queue = channel.getQueue();
+  var currentPlayer = channel.getCurrentPlayer();
+  tg.sendMessage(channel.getId(), "It's " + channel.getPlayer(queue[currentPlayer]).getName() + "'s turn.");
+});
+
+game.on(game.states.turnOver, function (channel) {});
+
+game.on(game.states.turnSkipped, function (channel) {
+  var queue = channel.getQueue();
+  var currentPlayer = channel.getCurrentPlayer();
+  var previousPlayer = --currentPlayer >= 0 ? currentPlayer : queue.length - 1;
+  tg.sendMessage(channel.getId(), channel.getPlayer(queue[previousPlayer]).getName() + ' skipped the turn!');
+});
+game.on(game.states.wrongWord, function (channel) {
+  tg.sendMessage(channel.getId(), 'Word not allowed or not found on dictionaries.');
+});
+
+game.on(game.states.lost, function (player) {
+  tg.sendMessage(channel.getId(), player.getName() + ' lost!');
+});
+
+game.on('game_over', function (channel) {
+  var channel = game.getChannel(chId);
+  tg.sendMessage(channel.getId(), "Cannot play alone, game's over! Start a new one perhaps?");
 });
