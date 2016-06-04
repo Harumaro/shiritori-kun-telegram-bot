@@ -98,6 +98,5 @@ game.on(game.states.lost, function (player) {
 });
 
 game.on('game_over', function (channel) {
-  var channel = game.getChannel(chId);
   tg.sendMessage(channel.getId(), "Cannot play alone, game's over! Start a new one perhaps?");
 });
