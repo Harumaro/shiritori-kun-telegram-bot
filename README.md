@@ -3,9 +3,9 @@
 
 **Configuration**:
 
-You need to add your telegram bot token in [index.js#1](https://github.com/Harumaro/shiritori-kun-telegram-bot/blob/master/index.js#L1)
+You need to add your telegram bot token in [.env#1](https://github.com/Harumaro/shiritori-kun-telegram-bot/blob/master/.env_example#L1)
 ```
-var tg = require('telegram-node-bot')('insert-telegram-bot-token-here');
+BOT_TOKEN=insert-telegram-bot-token-here
 ```
 
 **Usage**:

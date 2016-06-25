@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Harumaro/shiritori-kun-telegram-bot",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "node-telegram-bot-api": "^0.21.1",
     "request": "^2.72.0",
     "telegram-node-bot": "^2.1.3"

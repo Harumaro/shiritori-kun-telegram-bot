@@ -1,4 +1,6 @@
-var tg = require('telegram-node-bot')('insert-telegram-bot-token-here');
+require('dotenv').config();
+
+var tg = require('telegram-node-bot')(process.env.BOT_TOKEN);
 var game = require('./lib/game')({
   timeout: 10000,
   optionalRules: {
@@ -93,10 +95,14 @@ game.on(game.states.wrongWord, function (channel) {
   tg.sendMessage(channel.getId(), 'Word not allowed or not found on dictionaries.');
 });
 
-game.on(game.states.lost, function (player) {
+game.on(game.states.lost, function (channel, player) {
   tg.sendMessage(channel.getId(), player.getName() + ' lost!');
 });
 
 game.on('game_over', function (channel) {
   tg.sendMessage(channel.getId(), "Cannot play alone, game's over! Start a new one perhaps?");
+});
+
+process.on('SIGINT', function () {
+  process.exit();
 });
