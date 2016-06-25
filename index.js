@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({path: __dirname + '/.env'});
 
 var tg = require('telegram-node-bot')(process.env.BOT_TOKEN);
 var game = require('./lib/game')({
